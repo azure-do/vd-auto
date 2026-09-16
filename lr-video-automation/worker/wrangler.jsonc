@@ -1,0 +1,59 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lr-video-automation",
+  "account_id": "61c5c0e87a1622e4ffe6bdc62d6d87ad",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-16",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "logpush": false,
+  "observability": {
+    "enabled": false,
+    "logs": {
+      "enabled": false,
+      "invocation_logs": false,
+      "persist": false,
+      "destinations": []
+    },
+    "traces": {
+      "enabled": false,
+      "persist": false,
+      "destinations": []
+    }
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lr-video-automation-local",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "VIDEO_JOBS_QUEUE",
+        "queue": "lr-video-jobs"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "lr-video-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5,
+        "max_retries": 3,
+        "dead_letter_queue": "lr-video-jobs-dlq"
+      },
+      {
+        "queue": "lr-video-jobs-dlq",
+        "max_batch_size": 10,
+        "max_batch_timeout": 5
+      }
+    ]
+  },
+  "vars": {
+    "DLQ_QUEUE_NAME": "lr-video-jobs-dlq",
+    "RETENTION_DAYS": "30",
+    "OPERATOR_IDS": "operator_local",
+    "YOUTUBE_EXPECTED_CHANNEL_ID": "UC2WWWez1sd8VYuvUUPjGdMA"
+  }
+}

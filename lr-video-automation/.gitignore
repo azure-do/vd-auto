@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.dev.vars
+client_secret*.json
+*credentials*.json
+service-account*.json
+*.key
+*.pem
+.claude/settings.local.json
+.DS_Store
+node_modules/
+.wrangler/
+coverage/
+dist/

@@ -1,0 +1,57 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lr-video-automation-dev-20260824",
+  "account_id": "61c5c0e87a1622e4ffe6bdc62d6d87ad",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": ["global_fetch_strictly_public"],
+  "logpush": false,
+  "observability": {
+    "enabled": true,
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": false,
+      "persist": true,
+      "destinations": []
+    },
+    "traces": {
+      "enabled": false,
+      "persist": false,
+      "destinations": []
+    }
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "lr-video-automation-dev-20260824",
+    "database_id": "e35cdb5b-2de4-4f62-894f-62fefe904583",
+    "migrations_dir": "migrations"
+  }],
+  "r2_buckets": [{ "binding": "VIDEO_UPLOADS_R2", "bucket_name": "lr-video-automation-dev-20260824" }],
+  "queues": {
+    "producers": [{ "binding": "VIDEO_JOBS_QUEUE", "queue": "lr-video-automation-dev-20260824" }],
+    "consumers": [{
+      "queue": "lr-video-automation-dev-20260824",
+      "max_batch_size": 10,
+      "max_batch_timeout": 5,
+      "max_retries": 3,
+      "dead_letter_queue": "lr-video-automation-dev-20260824-dlq"
+    }, {
+      "queue": "lr-video-automation-dev-20260824-dlq",
+      "max_batch_size": 10,
+      "max_batch_timeout": 5
+    }]
+  },
+  "vars": {
+    "DLQ_QUEUE_NAME": "lr-video-automation-dev-20260824-dlq",
+    "R2_BUCKET_NAME": "lr-video-automation-dev-20260824",
+    "RETENTION_DAYS": "30",
+    "OPERATOR_IDS": "operator_dev",
+    "YOUTUBE_EXPECTED_CHANNEL_ID": "UC2WWWez1sd8VYuvUUPjGdMA",
+    "YOUTUBE_OAUTH_REDIRECT_URI": "https://lr-video-automation-dev-20260824.lr-video-automation-worker.workers.dev/__ops/e5/youtube-oauth/callback",
+    "YOUTUBE_OAUTH_CLIENT_ID": "286706610575-1k9atlfn3kb10mqts2vb5p4iso6ncskp.apps.googleusercontent.com",
+    "CLOUDFLARE_ACCESS_TEAM_DOMAIN": "long-rain-277e.cloudflareaccess.com",
+    "CLOUDFLARE_ACCESS_AUD": "cdcf7bfca631191dde27032d3e0e83b0e5f090bf26637e2f3382a8d9bcac0d2c"
+  }
+}

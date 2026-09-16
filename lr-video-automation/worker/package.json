@@ -1,0 +1,48 @@
+{
+  "name": "lr-video-automation-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "npm run verify:e3:r2-config && npm run verify:e5:oauth-config && npm run verify:e5:oauth-config:dev && npm run test:e5:oauth-config && npm run test:e5:oauth-deploy-wrapper && npm run test:e5:private-architecture && npm run typecheck && npm test && npm run test:e5:oauth-recovery-cli",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "demo": "vitest run test/demo.spec.ts test/e2-service.spec.ts test/e2-demo.spec.ts --reporter=verbose",
+    "demo:e5": "vitest run test/e5-demo.spec.ts test/e5-contracts.spec.ts --reporter=verbose",
+    "test:e5:r2-stream": "vitest run test/e5-r2-stream.spec.ts --reporter=verbose",
+    "test:e5:private-guard": "vitest run test/e5-private-request.spec.ts test/e5-contracts.spec.ts --reporter=verbose && npm run test:e5:private-architecture",
+    "test:e5:private-architecture": "node --test scripts/verify-e5-private-dispatch.node-test.mjs",
+    "test:e5:idempotency": "vitest run test/e5-idempotency-fence.spec.ts test/e5-contracts.spec.ts --reporter=verbose",
+    "demo:e5:oauth": "vitest run test/e5-youtube-oauth.spec.ts test/e5-access-google-http.spec.ts test/e5-oauth-recovery.spec.ts --reporter=verbose && npm run test:e5:oauth-recovery-cli",
+    "demo:e3": "vitest run test/e3-fake-upload.spec.ts --reporter=verbose",
+    "demo:e4": "vitest run test/e4-approval.spec.ts --reporter=verbose",
+    "demo:e2:prepare": "wrangler d1 migrations apply lr-video-automation-e2-demo --local --config demo/wrangler.e2-demo.jsonc",
+    "demo:e2": "npm run demo:e2:prepare && wrangler dev --local --ip 127.0.0.1 --port 8788 --config demo/wrangler.e2-demo.jsonc",
+    "verify:e2:migration-upgrade": "bash scripts/verify-e2-migration-upgrade.sh",
+    "verify:e3:migration-upgrade": "bash scripts/verify-e3-migration-upgrade.sh",
+    "verify:e4:migration-upgrade": "bash scripts/verify-e4-migration-upgrade.sh",
+    "verify:e3:r2-config": "node scripts/verify-e3-r2-config.mjs",
+    "verify:e5:migration-upgrade": "bash scripts/verify-e5-migration-upgrade.sh",
+    "verify:e5:oauth-migration": "bash scripts/verify-e5-oauth-migration-upgrade.sh",
+    "verify:e5:oauth-config": "node scripts/verify-e5-oauth-config.mjs",
+    "verify:e5:oauth-config:dev": "node scripts/verify-e5-oauth-config.mjs wrangler.e3-dev.jsonc",
+    "test:e5:oauth-config": "node --test scripts/verify-e5-oauth-config.node-test.mjs",
+    "test:e5:oauth-deploy-wrapper": "node --test scripts/deploy-e5-oauth-dev.node-test.mjs",
+    "deploy:e5:oauth:dev": "node scripts/deploy-e5-oauth-dev.mjs",
+    "test:e5:oauth-recovery-cli": "node --test scripts/e5-oauth-recovery-cli.node-test.mjs",
+    "e5:oauth-recovery": "node scripts/e5-oauth-recover.mjs",
+    "typecheck": "tsc --noEmit",
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply lr-video-automation-local --local"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "0.21.3",
+    "@cloudflare/workers-types": "5.20260903.1",
+    "@types/node": "24.3.0",
+    "typescript": "5.9.3",
+    "vitest": "4.1.10",
+    "wrangler": "4.128.0"
+  },
+  "dependencies": {
+    "mp4box": "2.4.1"
+  }
+}
